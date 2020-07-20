@@ -1,94 +1,36 @@
-import React, { Component } from 'react';
+import React, { useState } from 'react';
 
-class Calc extends Component {
-    state = {
-        taskString: ''
-    }
-    render() {
-        return (
-            <div ref={input => input && input.focus()} tabIndex={0} onKeyDown={this.onKeyPressed} className="wrapper">
-                <div style={{
-                    margin: 'auto',
-                    marginTop: '5vh',
-                    marginBottom: '3vh',
-                    paddingTop: '2vh',
-                    paddingBottom: '5vh',
-                    maxWidth: '930px',
-                    backgroundColor: '#E0E0E0',
-                    borderRadius: 25
-                }}>
+const Calc = () => {
+    const [taskString, setTaskString] = useState('');
 
-                    <div className="bar rightMargin">
-                        <div className="calculation">{this.state.taskString}</div>
-                    </div>
-                    <button className="btn element leftMargin lightOrange" onClick={() => this.btnClick('+')}>+</button>
-                    
-
-                    <br></br>
-
-                    <button className="btn element rightMargin lightGrey" onClick={() => this.btnClick('7')}>7</button>
-                    <button className="btn element leftMargin rightMargin lightGrey" onClick={() => this.btnClick('8')}>8</button>
-                    <button className="btn element leftMargin rightMargin lightGrey" onClick={() => this.btnClick('9')}>9</button>
-                    <button className="btn element leftMargin lightOrange" onClick={() => this.btnClick('-')}>-</button>
-
-                    <br></br>
-
-                    <button className="btn element rightMargin lightGrey" onClick={() => this.btnClick('4')}>4</button>
-                    <button className="btn element leftMargin rightMargin lightGrey" onClick={() => this.btnClick('5')}>5</button>
-                    <button className="btn element leftMargin rightMargin lightGrey" onClick={() => this.btnClick('6')}>6</button>
-                    <button className="btn element leftMargin lightOrange" onClick={() => this.btnClick('*')}>*</button>
-
-                    <br></br>
-
-                    <button className="btn element rightMargin lightGrey" onClick={() => this.btnClick('1')}>1</button>
-                    <button className="btn element leftMargin rightMargin lightGrey" onClick={() => this.btnClick('2')}>2</button>
-                    <button className="btn element leftMargin rightMargin lightGrey" onClick={() => this.btnClick('3')}>3</button>
-                    <button className="btn element leftMargin lightOrange" onClick={() => this.btnClick('/')}>/</button>
-
-                    <br></br>
-
-                    <button className="btn element rightMargin lightGrey" onClick={() => this.btnClick('.')}>.</button>
-                    <button className="btn element leftMargin rightMargin lightGrey" onClick={() => this.btnClick('0')}>0</button>
-                    <button className="btn element darkOrange leftMargin rightMargin" onClick={() => this.setState({taskString: ''})}>C</button>
-                    <button className="btn element leftMargin darkOrange" onClick={() => this.btnClickEqual()}>=</button>
-
-                </div>
-            </div>
-        );
+    const sleep = time => {
+        return new Promise((resolve) => setTimeout(resolve, time));
     }
 
-    btnClickEqual = () => {
+    const btnClickEqual = () => {
         try {
-            this.setState({taskString: eval(this.state.taskString).toString()});
+            setTaskString(eval(taskString).toString());
         }
         catch {
-            this.setState({taskString: "ERROR"});
-            this.sleep(1000).then(() => {
-                this.setState({taskString: ""});
+            setTaskString("ERROR");
+            sleep(1000).then(() => {
+                setTaskString("");
             });
         }
     }
 
-    btnClick = value => {
-        this.setState({taskString: this.state.taskString.concat(value)});
-    }
-
-    sleep(time) {
-        return new Promise((resolve) => setTimeout(resolve, time));
-    }
-
-    onKeyPressed = e => {
+    const onKeyPressed = e => {
         let input;
         let validInput;
         switch (e.keyCode) {
             case 8:
-                this.setState({taskString: this.state.taskString.substring(0, this.state.taskString.length - 1)});
+                setTaskString(taskString.substring(0, taskString.length - 1));
                 break;
             case 13:
-                this.btnClickEqual();
+                btnClickEqual();
                 break;
             case 46:
-                this.setState({taskString: ''});
+                setTaskString('');
                 break;
             case 96:
                 input = '0';
@@ -159,8 +101,47 @@ class Calc extends Component {
                 
         }
         if (validInput)
-            this.setState({taskString: this.state.taskString.concat(input)});
-      }
+            setTaskString(taskString.concat(input));
+    }
+
+    return (
+        <div ref={input => input && input.focus()} tabIndex={0} onKeyDown={onKeyPressed} className="wrapper">
+            <div className="calculator">
+                <div className="bar rightMargin">
+                    <div className="calculation">{taskString}</div>
+                </div>
+                <button className="btn element leftMargin lightOrange" onClick={() => setTaskString(taskString.concat('+'))}>+</button>
+                
+                <br></br>
+
+                <button className="btn element rightMargin lightGrey" onClick={() => setTaskString(taskString.concat('7'))}>7</button>
+                <button className="btn element leftMargin rightMargin lightGrey" onClick={() => setTaskString(taskString.concat('8'))}>8</button>
+                <button className="btn element leftMargin rightMargin lightGrey" onClick={() => setTaskString(taskString.concat('9'))}>9</button>
+                <button className="btn element leftMargin lightOrange" onClick={() => setTaskString(taskString.concat('-'))}>-</button>
+
+                <br></br>
+
+                <button className="btn element rightMargin lightGrey" onClick={() => setTaskString(taskString.concat('4'))}>4</button>
+                <button className="btn element leftMargin rightMargin lightGrey" onClick={() => setTaskString(taskString.concat('5'))}>5</button>
+                <button className="btn element leftMargin rightMargin lightGrey" onClick={() => setTaskString(taskString.concat('6'))}>6</button>
+                <button className="btn element leftMargin lightOrange" onClick={() => setTaskString(taskString.concat('*'))}>*</button>
+
+                <br></br>
+
+                <button className="btn element rightMargin lightGrey" onClick={() => setTaskString(taskString.concat('1'))}>1</button>
+                <button className="btn element leftMargin rightMargin lightGrey" onClick={() => setTaskString(taskString.concat('2'))}>2</button>
+                <button className="btn element leftMargin rightMargin lightGrey" onClick={() => setTaskString(taskString.concat('3'))}>3</button>
+                <button className="btn element leftMargin lightOrange" onClick={() => setTaskString(taskString.concat('/'))}>/</button>
+
+                <br></br>
+
+                <button className="btn element rightMargin lightGrey" onClick={() => setTaskString(taskString.concat('.'))}>.</button>
+                <button className="btn element leftMargin rightMargin lightGrey" onClick={() => setTaskString(taskString.concat('0'))}>0</button>
+                <button className="btn element darkOrange leftMargin rightMargin" onClick={() => setTaskString(taskString.concat(''))}>C</button>
+                <button className="btn element leftMargin darkOrange" onClick={() => btnClickEqual()}>=</button>
+            </div>
+        </div>
+    );
 }
  
 export default Calc;
